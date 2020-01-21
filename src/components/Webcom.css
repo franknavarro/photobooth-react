@@ -1,0 +1,34 @@
+.flex-container {
+  display: flex;
+  flex-flow: column;
+  justify-content: space-between;
+  text-align: center;
+  width: 100%;
+  height: 100%;
+}
+
+.text-container {
+  font-size: 8vh;
+  color: white;
+  padding: 3vh;
+}
+
+.video-container {
+  flex: 1 1 auto;
+  height: 32px;
+}
+.video-container > * {
+  /* Make sure to subtract the padding from the max height */
+  padding: 1vh;
+  height: calc(100% - 2 * 1vh);
+  max-width: 100%;
+  background: white;
+  border-radius: 15px;
+}
+
+.video-container > .on-top {
+  display: initial;
+}
+.video-container > .hidden {
+  display: none;
+}
