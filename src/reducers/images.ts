@@ -7,6 +7,9 @@ export const imagesReducer = (state: ImageState = [], action: Action) => {
     case ActionTypes.addImage:
       return [...state, action.payload];
 
+    case ActionTypes.clearImages:
+      return [];
+
     default:
       return state;
   }

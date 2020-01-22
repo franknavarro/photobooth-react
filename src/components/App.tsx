@@ -1,8 +1,10 @@
 import React, { CSSProperties } from 'react';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { Router, Route, Switch } from 'react-router-dom';
 
 import WebcamCapture from 'components/webcam/WebcamPage';
 import SelectPage from 'components/selector/SelectPage';
+// Must use relative import here because history is already a package
+import history from 'routerHistory';
 
 const containerStyles: CSSProperties = {
   backgroundColor: 'pink',
@@ -16,12 +18,12 @@ const containerStyles: CSSProperties = {
 const App: React.FC = () => {
   return (
     <div style={containerStyles}>
-      <BrowserRouter>
+      <Router history={history}>
         <Switch>
           <Route path="/" exact component={WebcamCapture} />
           <Route path="/select" exact component={SelectPage} />
         </Switch>
-      </BrowserRouter>
+      </Router>
     </div>
   );
 };
