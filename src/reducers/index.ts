@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
 
-import { imagesReducer, ImageState } from './images';
-import { photostripsReducer, PhotostripState } from './photostrips';
+import { imagesReducer, ImageState } from 'reducers/images';
+import { photostripsReducer, PhotostripState } from 'reducers/photostrips';
 
 export interface StoreState {
   images: ImageState;

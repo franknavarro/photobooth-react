@@ -1,3 +1,3 @@
-export * from './images';
-export * from './photostrips';
-export * from './types';
+export * from 'actions/images';
+export * from 'actions/photostrips';
+export * from 'actions/types';

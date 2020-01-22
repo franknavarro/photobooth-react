@@ -1,5 +1,5 @@
-import { AddImageAction } from './images';
-import { CreateStripsAction } from './photostrips';
+import { AddImageAction } from 'actions/images';
+import { CreateStripsAction } from 'actions/photostrips';
 
 export enum ActionTypes {
   addImage,

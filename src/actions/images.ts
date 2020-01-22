@@ -1,4 +1,4 @@
-import { ActionTypes } from './types';
+import { ActionTypes } from 'actions/types';
 
 export interface AddImageAction {
   type: ActionTypes.addImage;

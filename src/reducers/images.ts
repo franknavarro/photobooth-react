@@ -1,4 +1,4 @@
-import { ActionTypes, Action } from '../actions';
+import { ActionTypes, Action } from 'actions';
 
 export type ImageState = string[];
 

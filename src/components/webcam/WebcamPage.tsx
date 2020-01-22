@@ -1,14 +1,14 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import Webcam from 'react-webcam';
-
-import TextContainer from './TextContainer';
-
-import './Webcom.css';
-
-import { addImage, createStrips } from '../actions';
-import { StoreState } from '../reducers';
 import { RouteComponentProps } from 'react-router-dom';
+
+import TextContainer from 'components/TextContainer';
+
+import 'components/webcam/WebcomPage.css';
+
+import { addImage, createStrips } from 'actions';
+import { StoreState } from 'reducers';
 
 const videoConstraints = {
   facingMode: 'user',

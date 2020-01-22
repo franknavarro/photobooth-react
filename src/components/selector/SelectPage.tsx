@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useSelector } from 'react-redux';
-
-import { StoreState } from '../reducers';
 import { Link } from 'react-router-dom';
 
-const SelectImage: React.FC = () => {
+import { StoreState } from 'reducers';
+
+const SelectPage: React.FC = () => {
   const photostrips = useSelector((state: StoreState) => state.photostrips);
 
   return (
@@ -15,4 +15,4 @@ const SelectImage: React.FC = () => {
   );
 };
 
-export default SelectImage;
+export default SelectPage;

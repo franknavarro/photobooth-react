@@ -1,8 +1,8 @@
 import React, { CSSProperties } from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
-import WebcamCapture from './Webcam';
-import SelectImage from './SelectImage';
+import WebcamCapture from 'components/webcam/WebcamPage';
+import SelectPage from 'components/selector/SelectPage';
 
 const containerStyles: CSSProperties = {
   backgroundColor: 'pink',
@@ -19,7 +19,7 @@ const App: React.FC = () => {
       <BrowserRouter>
         <Switch>
           <Route path="/" exact component={WebcamCapture} />
-          <Route path="/select" exact component={SelectImage} />
+          <Route path="/select" exact component={SelectPage} />
         </Switch>
       </BrowserRouter>
     </div>

@@ -1,7 +1,7 @@
-import { ActionTypes } from './types';
 import { Dispatch } from 'redux';
-
 import Jimp from 'jimp';
+
+import { ActionTypes } from 'actions/types';
 
 export interface CreateStripsAction {
   type: ActionTypes.createStrips;
