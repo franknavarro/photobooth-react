@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import Webcam from 'react-webcam';
 
 import './Webcom.css';
-import { addImage } from '../actions';
+import { addImage, createStrips } from '../actions';
 import { StoreState } from '../reducers';
 import { RouteComponentProps } from 'react-router-dom';
 
@@ -17,34 +17,34 @@ enum countDownStates {
   forImage,
 }
 
-const startCountAt: number = 5;
+const cameraCount: number = 1;
+const pictureCount: number = 1;
 const maxPhotos: number = 3;
 
 const WebcamPic: React.FC<RouteComponentProps> = ({ history }) => {
   const dispatch = useDispatch();
 
-  const [countDown, setCountDown] = useState(startCountAt + 1);
+  const [countDown, setCountDown] = useState(cameraCount + 1);
   const [countState, setCountState] = useState(countDownStates.initial);
-  const resetCountDown = () => {
-    setCountDown(startCountAt);
-  };
-  const startCountDown = useCallback((event: KeyboardEvent) => {
-    if (event.key === ' ') {
-      setCountState(countDownStates.forSnapShot);
-      window.removeEventListener('keydown', startCountDown);
-    }
-  }, []);
 
   const images = useSelector((state: StoreState) => state.images);
   const getRecentImage = () => images[images.length - 1];
 
   const webcamRef = React.useRef<any>(null);
 
+  // Wait for Keyboard press to start count down
+  const startCountDown = useCallback((event: KeyboardEvent) => {
+    if (event.key === ' ') {
+      setCountState(countDownStates.forSnapShot);
+      window.removeEventListener('keydown', startCountDown);
+    }
+  }, []);
   useEffect(() => {
     window.addEventListener('keydown', startCountDown);
     return () => window.removeEventListener('keydown', startCountDown);
   }, [startCountDown]);
 
+  // Update the count down timer every second
   useEffect(() => {
     if (countState !== countDownStates.initial) {
       const timer = setInterval(() => {
@@ -54,16 +54,26 @@ const WebcamPic: React.FC<RouteComponentProps> = ({ history }) => {
     }
   });
 
+  // Count down reached zero figure out what to do next
   useEffect(() => {
+    // Switch to show image instead of webcam
     if (countDown < 1 && countState === countDownStates.forSnapShot) {
       const imgSrc = webcamRef.current.getScreenshot();
       dispatch(addImage(imgSrc));
       setCountState(countDownStates.forImage);
-      resetCountDown();
+      setCountDown(pictureCount);
+      console.log(images.length);
+      // Last image will display start creation of photostrips
+      if (images.length >= maxPhotos - 1) {
+        console.log('kick off creation of photostrips');
+        dispatch(createStrips());
+      }
+      // Switch to show webcam instead of image
     } else if (countDown < 1 && countState === countDownStates.forImage) {
       if (images.length < maxPhotos) {
         setCountState(countDownStates.forSnapShot);
-        resetCountDown();
+        setCountDown(cameraCount);
+        // Last image finished displaying
       } else {
         history.push('/select');
       }
@@ -87,7 +97,7 @@ const WebcamPic: React.FC<RouteComponentProps> = ({ history }) => {
         return 'Looking goooooooood!!!!';
 
       default:
-        if (countDown > startCountAt) {
+        if (countDown > cameraCount) {
           return 'Get Ready!';
         }
         return countDown;
