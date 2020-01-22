@@ -2,7 +2,10 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import Webcam from 'react-webcam';
 
+import TextContainer from './TextContainer';
+
 import './Webcom.css';
+
 import { addImage, createStrips } from '../actions';
 import { StoreState } from '../reducers';
 import { RouteComponentProps } from 'react-router-dom';
@@ -85,7 +88,7 @@ const WebcamPic: React.FC<RouteComponentProps> = ({ history }) => {
     imageOnTop = true;
   }
 
-  const getBottomText = () => {
+  const getBottomText = (): string => {
     switch (countState) {
       case countDownStates.initial:
         return 'Push Button to Start';
@@ -100,11 +103,11 @@ const WebcamPic: React.FC<RouteComponentProps> = ({ history }) => {
         if (countDown > cameraCount) {
           return 'Get Ready!';
         }
-        return countDown;
+        return `${countDown}`;
     }
   };
 
-  const getTopText = () => {
+  const getTopText = (): string => {
     if (countState === countDownStates.initial) {
       return 'Photobooth';
     }
@@ -117,7 +120,9 @@ const WebcamPic: React.FC<RouteComponentProps> = ({ history }) => {
 
   return (
     <div className="flex-container">
-      <div className="text-container">{getTopText()}</div>
+      <TextContainer className="text-container--top">
+        {getTopText()}
+      </TextContainer>
       <div className="video-container">
         <img
           src={getRecentImage()}
@@ -132,7 +137,9 @@ const WebcamPic: React.FC<RouteComponentProps> = ({ history }) => {
           className={!imageOnTop ? 'on-top' : 'hidden'}
         />
       </div>
-      <div className="text-container">{getBottomText()}</div>
+      <TextContainer className="text-container--bottom">
+        {getBottomText()}
+      </TextContainer>
     </div>
   );
 };
