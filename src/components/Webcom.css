@@ -1,7 +1,7 @@
 .flex-container {
   display: flex;
   flex-flow: column;
-  justify-content: space-evenly;
+  justify-content: center;
   text-align: center;
   align-items: center;
   width: 100%;
@@ -9,13 +9,21 @@
 }
 
 .text-container {
-  font-size: 8vh;
+  font-size: 3rem;
   color: white;
   padding: 3vh;
+  flex: 1;
+  display: flex;
+}
+.text-container--top > span {
+  align-self: flex-end;
+}
+.text-container--bottom > span {
+  align-self: flex-start;
 }
 
 .video-container {
-  padding: 3vh;
+  padding: 0 3vh;
 }
 
 .video-container > * {
