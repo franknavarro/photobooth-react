@@ -1,8 +1,9 @@
 .flex-container {
   display: flex;
   flex-flow: column;
-  justify-content: space-between;
+  justify-content: space-evenly;
   text-align: center;
+  align-items: center;
   width: 100%;
   height: 100%;
 }
@@ -14,16 +15,16 @@
 }
 
 .video-container {
-  flex: 1 1 auto;
-  height: 32px;
+  padding: 3vh;
 }
+
 .video-container > * {
-  /* Make sure to subtract the padding from the max height */
   padding: 1vh;
-  height: calc(100% - 2 * 1vh);
+  max-height: 100%;
   max-width: 100%;
   background: white;
   border-radius: 15px;
+  box-sizing: border-box;
 }
 
 .video-container > .on-top {
