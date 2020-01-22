@@ -43,10 +43,9 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "start:react": "react-scripts start",
-    "start:electron": "cross-env NODE_ENV=dev nodemon --exec \"electron .\"",
-    "start:web": "cross-env BROWSER=none npm run start:react",
-    "start": "electron ."
+    "start-react": "BROWSER=none react-scripts start",
+    "start-electron": "wait-on http://localhost:3000 && NODE_ENV=dev electron .",
+    "start": "concurrently \"npm:start-*\""
   },
   "eslintConfig": {
     "extends": "react-app"
