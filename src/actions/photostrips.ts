@@ -78,9 +78,11 @@ export const createStrips = (): PromiseThunk => {
   };
 };
 
-export const clearStrips = (): ClearStripsAction => {
-  history.push('/');
+export const resetAndPrint = (print: string): ClearStripsAction => {
+  history.push('/print');
+  console.log('Print', print);
   return {
     type: ActionTypes.clearStrips,
   };
 };
+

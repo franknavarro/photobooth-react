@@ -3,6 +3,8 @@ import { Router, Route, Switch } from 'react-router-dom';
 
 import WebcamCapture from 'components/webcam/WebcamPage';
 import SelectPage from 'components/selector/SelectPage';
+import PrintPage from 'components/print/PrintPage';
+
 // Must use relative import here because history is already a package
 import history from 'routerHistory';
 
@@ -22,6 +24,7 @@ const App: React.FC = () => {
         <Switch>
           <Route path="/" exact component={WebcamCapture} />
           <Route path="/select" exact component={SelectPage} />
+          <Route path="/print" exact component={PrintPage} />
         </Switch>
       </Router>
     </div>
