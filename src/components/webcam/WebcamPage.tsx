@@ -20,8 +20,8 @@ enum countDownStates {
   forImage,
 }
 
-const cameraCount: number = 1;
-const pictureCount: number = 1;
+const cameraCount: number = 5;
+const pictureCount: number = 2;
 const maxPhotos: number = 3;
 
 const WebcamPic: React.FC<RouteComponentProps> = ({ history }) => {
@@ -35,13 +35,16 @@ const WebcamPic: React.FC<RouteComponentProps> = ({ history }) => {
   const webcamRef = React.useRef<any>(null);
 
   // Wait for Keyboard press to start count down
-  const startCountDown = useCallback((event: KeyboardEvent) => {
-    if (event.key === ' ') {
-      setCountState(countDownStates.forSnapShot);
-      resetCountDown();
-      window.removeEventListener('keydown', startCountDown);
-    }
-  }, []);
+  const startCountDown = useCallback(
+    (event: KeyboardEvent) => {
+      if (event.key === ' ') {
+        setCountState(countDownStates.forSnapShot);
+        resetCountDown();
+        window.removeEventListener('keydown', startCountDown);
+      }
+    },
+    [resetCountDown],
+  );
   useEffect(() => {
     window.addEventListener('keydown', startCountDown);
     return () => window.removeEventListener('keydown', startCountDown);
