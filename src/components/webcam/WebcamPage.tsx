@@ -7,7 +7,7 @@ import TextContainer from 'components/TextContainer';
 
 import 'components/webcam/WebcomPage.css';
 
-import { updateStrip, createStrips } from 'actions';
+import { addPhoto, createStrips } from 'actions';
 
 const videoConstraints = {
   facingMode: 'user',
@@ -62,7 +62,7 @@ const WebcamPic: React.FC<RouteComponentProps> = ({ history }) => {
       const imgSrc = webcamRef.current.getScreenshot();
       const newImageCount = imageCount + 1;
 
-      dispatch(updateStrip(imgSrc, newImageCount));
+      dispatch(addPhoto(imgSrc, newImageCount));
       setImageCount(newImageCount);
       setCountState(countDownStates.forImage);
       setCaptured(imgSrc);

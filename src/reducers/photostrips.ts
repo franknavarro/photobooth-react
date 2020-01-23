@@ -8,9 +8,12 @@ export interface StripProps {
   pic: string;
 }
 
+export type ImageList = string[];
+
 export type PhotostripState = {
   inProgress: Jimp;
   all: StripProps[];
+  images: ImageList;
 };
 
 const resetJimpImage = (): Jimp => {
@@ -20,6 +23,7 @@ const resetJimpImage = (): Jimp => {
 const INITIAL_STATE: PhotostripState = {
   inProgress: resetJimpImage(),
   all: [],
+  images: [],
 };
 
 export const photostripsReducer = (
@@ -27,6 +31,9 @@ export const photostripsReducer = (
   action: Action,
 ): PhotostripState => {
   switch (action.type) {
+    case ActionTypes.addPhoto:
+      return { ...state, images: [...state.images, action.payload] };
+
     case ActionTypes.updateStrip:
       return { ...state, inProgress: action.payload };
 
@@ -34,7 +41,7 @@ export const photostripsReducer = (
       return { ...state, all: action.payload };
 
     case ActionTypes.clearStrips:
-      return { inProgress: resetJimpImage(), all: [] };
+      return { inProgress: resetJimpImage(), all: [], images: [] };
 
     default:
       return state;

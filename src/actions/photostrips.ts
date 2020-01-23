@@ -1,7 +1,7 @@
 import Jimp from 'jimp';
 
 import { ActionTypes } from 'actions/types';
-import { PromiseThunk } from 'reducers';
+import { PromiseThunk, AppThunk } from 'reducers';
 import { StripProps } from 'reducers/photostrips';
 
 import history from 'routerHistory';
@@ -13,6 +13,11 @@ import {
   xPosition,
   yPositions,
 } from 'resources/constants';
+
+export interface AddPhotoAction {
+  type: ActionTypes.addPhoto;
+  payload: string;
+}
 
 export interface CreateStripsAction {
   type: ActionTypes.createStrips;
@@ -30,6 +35,16 @@ interface StripData {
   type: string;
   images: Jimp[];
 }
+
+export const addPhoto = (recentImage: string, imageNum: number): AppThunk => {
+  return dispatch => {
+    dispatch({
+      type: ActionTypes.addPhoto,
+      payload: recentImage,
+    });
+    dispatch(updateStrip(recentImage, imageNum));
+  };
+};
 
 export const updateStrip = (
   recentImage: string,
@@ -85,4 +100,3 @@ export const resetAndPrint = (print: string): ClearStripsAction => {
     type: ActionTypes.clearStrips,
   };
 };
-
