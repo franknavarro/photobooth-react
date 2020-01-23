@@ -2,10 +2,16 @@ import Jimp from 'jimp';
 
 import { ActionTypes } from 'actions/types';
 import { AppThunk } from 'reducers';
+import { PhotostripState, StripProps } from 'reducers/photostrips';
 
 export interface CreateStripsAction {
   type: ActionTypes.createStrips;
-  payload: string;
+  payload: PhotostripState;
+}
+
+interface StripData {
+  type: string;
+  images: Jimp[];
 }
 
 type dimmensions = [number, number];
@@ -38,7 +44,7 @@ export const createStrips = (): AppThunk<Promise<void>> => {
       photoPaperPixels[1],
     ];
 
-    const imageSizePixels = [
+    const imageSizePixels: dimmensions = [
       stripSizePixels[0] - fullBorders[0],
       (stripSizePixels[1] - fullBorders[1]) / imageports,
     ];
@@ -50,21 +56,36 @@ export const createStrips = (): AppThunk<Promise<void>> => {
       yPositions.push(newX);
     }
 
-    const stripMain = new Jimp(...stripSizePixels, 'white', () => {});
+    const stripColored: Jimp = new Jimp(...stripSizePixels, 'white', () => {});
     await Promise.all(
       imagesBase64.map(async (image: string, index: number) => {
-        const jimpImg = await Jimp.read(image);
+        const jimpImg: Jimp = await Jimp.read(image);
         jimpImg.resize(imageSizePixels[0], imageSizePixels[1]);
-        stripMain.composite(jimpImg, xPosition, yPositions[index]);
+        stripColored.composite(jimpImg, xPosition, yPositions[index]);
       }),
     );
 
-    const base64 = await stripMain.getBase64Async(Jimp.MIME_JPEG);
-    // console.log('Finished generating base64');
+    const stripBW = stripColored.clone().grayscale();
+
+    const stripMapData: StripData[] = [
+      { type: 'Colored', images: [stripColored, stripColored] },
+      { type: 'Black & White', images: [stripBW, stripBW] },
+      { type: 'Both', images: [stripColored, stripBW] },
+    ];
+
+    const allStrips = await Promise.all<StripProps>(
+      stripMapData.map(async ({ type, images }) => {
+        const newStrip = await new Jimp(...photoPaperPixels, 'white')
+          .composite(images[0], 0, 0)
+          .composite(images[1], stripSizePixels[0], 0)
+          .getBase64Async(Jimp.MIME_JPEG);
+        return { type, pic: newStrip };
+      }),
+    );
 
     dispatch<CreateStripsAction>({
       type: ActionTypes.createStrips,
-      payload: base64,
+      payload: allStrips,
     });
   };
 };

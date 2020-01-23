@@ -1,12 +1,13 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { RouteComponentProps } from 'react-router-dom';
 
 import { StoreState } from 'reducers';
 import { clearImages } from 'actions';
 
-const SelectPage: React.FC<RouteComponentProps> = ({ history }) => {
+const SelectPage: React.FC = () => {
   const photostrips = useSelector((state: StoreState) => state.photostrips);
+  console.log('RENDER');
+  console.log(photostrips);
   const dispatch = useDispatch();
 
   const clearOut = (): void => {
@@ -15,11 +16,14 @@ const SelectPage: React.FC<RouteComponentProps> = ({ history }) => {
 
   return (
     <>
-      <img
-        style={{ maxWidth: '100%', maxHeight: '100%' }}
-        src={photostrips.color}
-        alt="colored-strip"
-      />
+      {photostrips.map(({ type, pic }) => (
+        <img
+          key={type}
+          style={{ maxWidth: '50%', maxHeight: '50%', padding: '5px' }}
+          src={pic}
+          alt={type}
+        />
+      ))}
       <button onClick={clearOut}>Back to start</button>
     </>
   );
