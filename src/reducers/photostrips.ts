@@ -16,7 +16,6 @@ export const photostripsReducer = (
 ) => {
   switch (action.type) {
     case ActionTypes.createStrips:
-      console.log(action.payload);
       return { ...state, color: action.payload };
 
     default:

@@ -7,7 +7,7 @@ import TextContainer from 'components/TextContainer';
 
 import 'components/webcam/WebcomPage.css';
 
-import { addImage, createStrips } from 'actions';
+import { addImage } from 'actions';
 import { StoreState } from 'reducers';
 
 const videoConstraints = {
@@ -65,13 +65,6 @@ const WebcamPic: React.FC<RouteComponentProps> = ({ history }) => {
       dispatch(addImage(imgSrc));
       setCountState(countDownStates.forImage);
       setCountDown(pictureCount);
-      console.log(images.length);
-      // Last image will display start creation of photostrips
-      if (images.length >= maxPhotos - 1) {
-        console.log('kick off creation of photostrips');
-        dispatch(createStrips());
-      }
-      // Switch to show webcam instead of image
     } else if (countDown < 1 && countState === countDownStates.forImage) {
       if (images.length < maxPhotos) {
         setCountState(countDownStates.forSnapShot);
