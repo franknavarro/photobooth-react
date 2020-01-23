@@ -1,19 +1,32 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { RouteChildrenProps } from 'react-router-dom';
 
 import TextContainer from 'components/TextContainer';
 import { StoreState } from 'reducers';
 import { resetAndPrint } from 'actions';
 
 import 'components/selector/SelectPage.css';
+import { useCountDown } from 'resources/useCountDown';
 
-const SelectPage: React.FC = () => {
+const SelectPage: React.FC<RouteChildrenProps> = ({ history }) => {
   const photostrips = useSelector((state: StoreState) => state.photostrips.all);
+  console.log(photostrips);
+  const firstOption = photostrips[0];
+
+  const [countDown] = useCountDown(10);
+
   const dispatch = useDispatch();
 
   const printThisPhoto = (print: string): void => {
     dispatch(resetAndPrint(print));
   };
+
+  useEffect(() => {
+    if (countDown === 0) {
+      dispatch(resetAndPrint(firstOption.pic));
+    }
+  }, [countDown, firstOption, dispatch]);
 
   return (
     <div className="flex-container">
@@ -35,7 +48,7 @@ const SelectPage: React.FC = () => {
         ))}
       </div>
       <TextContainer className="text-container--top">
-        Auto-Selecting "Color" in 10
+        Auto-Selecting "{firstOption.type}" in {countDown}
       </TextContainer>
     </div>
   );
