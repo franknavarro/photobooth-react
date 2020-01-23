@@ -8,6 +8,7 @@ import TextContainer from 'components/TextContainer';
 import 'components/webcam/WebcomPage.css';
 
 import { addPhoto, createStrips } from 'actions';
+import { useCountDown } from 'resources/useCountDown';
 
 const videoConstraints = {
   facingMode: 'user',
@@ -26,7 +27,7 @@ const maxPhotos: number = 3;
 const WebcamPic: React.FC<RouteComponentProps> = ({ history }) => {
   const dispatch = useDispatch();
 
-  const [countDown, setCountDown] = useState(cameraCount + 1);
+  const [countDown, resetCountDown] = useCountDown(cameraCount + 1, false);
   const [countState, setCountState] = useState(countDownStates.initial);
   const [recentCapture, setCaptured] = useState('');
   const [imageCount, setImageCount] = useState(0);
@@ -37,6 +38,7 @@ const WebcamPic: React.FC<RouteComponentProps> = ({ history }) => {
   const startCountDown = useCallback((event: KeyboardEvent) => {
     if (event.key === ' ') {
       setCountState(countDownStates.forSnapShot);
+      resetCountDown();
       window.removeEventListener('keydown', startCountDown);
     }
   }, []);
@@ -44,16 +46,6 @@ const WebcamPic: React.FC<RouteComponentProps> = ({ history }) => {
     window.addEventListener('keydown', startCountDown);
     return () => window.removeEventListener('keydown', startCountDown);
   }, [startCountDown]);
-
-  // Update the count down timer every second
-  useEffect(() => {
-    if (countState !== countDownStates.initial) {
-      const timer = setInterval(() => {
-        setCountDown(countDown - 1);
-      }, 1000);
-      return () => clearInterval(timer);
-    }
-  });
 
   // Count down reached zero figure out what to do next
   useEffect(() => {
@@ -66,11 +58,11 @@ const WebcamPic: React.FC<RouteComponentProps> = ({ history }) => {
       setImageCount(newImageCount);
       setCountState(countDownStates.forImage);
       setCaptured(imgSrc);
-      setCountDown(pictureCount);
+      resetCountDown(pictureCount);
     } else if (countDown < 1 && countState === countDownStates.forImage) {
       if (imageCount < maxPhotos) {
         setCountState(countDownStates.forSnapShot);
-        setCountDown(cameraCount);
+        resetCountDown(cameraCount);
 
         // Last image finished displaying
       } else {
@@ -78,7 +70,7 @@ const WebcamPic: React.FC<RouteComponentProps> = ({ history }) => {
         history.push('/select');
       }
     }
-  }, [dispatch, countDown, countState, history, imageCount]);
+  }, [dispatch, countDown, countState, history, imageCount, resetCountDown]);
 
   let imageOnTop = false;
   if (countState === countDownStates.forImage) {
