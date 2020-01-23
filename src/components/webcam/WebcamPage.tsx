@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import Webcam from 'react-webcam';
 import { RouteComponentProps } from 'react-router-dom';
 
@@ -7,8 +7,7 @@ import TextContainer from 'components/TextContainer';
 
 import 'components/webcam/WebcomPage.css';
 
-import { addImage } from 'actions';
-import { StoreState } from 'reducers';
+import { updateStrip, createStrips } from 'actions';
 
 const videoConstraints = {
   facingMode: 'user',
@@ -29,9 +28,8 @@ const WebcamPic: React.FC<RouteComponentProps> = ({ history }) => {
 
   const [countDown, setCountDown] = useState(cameraCount + 1);
   const [countState, setCountState] = useState(countDownStates.initial);
-
-  const images = useSelector((state: StoreState) => state.images);
-  const getRecentImage = () => images[images.length - 1];
+  const [recentCapture, setCaptured] = useState('');
+  const [imageCount, setImageCount] = useState(0);
 
   const webcamRef = React.useRef<any>(null);
 
@@ -62,19 +60,25 @@ const WebcamPic: React.FC<RouteComponentProps> = ({ history }) => {
     // Switch to show image instead of webcam
     if (countDown < 1 && countState === countDownStates.forSnapShot) {
       const imgSrc = webcamRef.current.getScreenshot();
-      dispatch(addImage(imgSrc));
+      const newImageCount = imageCount + 1;
+
+      dispatch(updateStrip(imgSrc, newImageCount));
+      setImageCount(newImageCount);
       setCountState(countDownStates.forImage);
+      setCaptured(imgSrc);
       setCountDown(pictureCount);
     } else if (countDown < 1 && countState === countDownStates.forImage) {
-      if (images.length < maxPhotos) {
+      if (imageCount < maxPhotos) {
         setCountState(countDownStates.forSnapShot);
         setCountDown(cameraCount);
+
         // Last image finished displaying
       } else {
+        dispatch(createStrips());
         history.push('/select');
       }
     }
-  }, [dispatch, countDown, countState, images, history]);
+  }, [dispatch, countDown, countState, history, imageCount]);
 
   let imageOnTop = false;
   if (countState === countDownStates.forImage) {
@@ -87,7 +91,7 @@ const WebcamPic: React.FC<RouteComponentProps> = ({ history }) => {
         return 'Push Button to Start';
 
       case countDownStates.forImage:
-        if (images.length < maxPhotos) {
+        if (imageCount < maxPhotos) {
           return 'Get Ready for the next one!';
         }
         return 'Looking goooooooood!!!!';
@@ -104,10 +108,9 @@ const WebcamPic: React.FC<RouteComponentProps> = ({ history }) => {
     if (countState === countDownStates.initial) {
       return 'Photobooth';
     }
+
     const imageNum =
-      countState === countDownStates.forImage
-        ? images.length
-        : images.length + 1;
+      countState === countDownStates.forImage ? imageCount : imageCount + 1;
     return `Photo ${imageNum} of ${maxPhotos}`;
   };
 
@@ -118,7 +121,7 @@ const WebcamPic: React.FC<RouteComponentProps> = ({ history }) => {
       </TextContainer>
       <div className="video-container">
         <img
-          src={getRecentImage()}
+          src={recentCapture}
           alt={'screenshot'}
           className={imageOnTop ? 'on-top' : 'hidden'}
         />

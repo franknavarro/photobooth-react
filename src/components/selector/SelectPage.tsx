@@ -2,16 +2,16 @@ import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { StoreState } from 'reducers';
-import { clearImages } from 'actions';
+import { clearStrips } from 'actions';
 
 const SelectPage: React.FC = () => {
-  const photostrips = useSelector((state: StoreState) => state.photostrips);
+  const photostrips = useSelector((state: StoreState) => state.photostrips.all);
   console.log('RENDER');
   console.log(photostrips);
   const dispatch = useDispatch();
 
   const clearOut = (): void => {
-    dispatch(clearImages());
+    dispatch(clearStrips());
   };
 
   return (

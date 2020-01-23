@@ -1,10 +1,16 @@
-import { AddImageAction, ClearImagesAction } from 'actions/images';
-import { CreateStripsAction } from 'actions/photostrips';
+import {
+  CreateStripsAction,
+  UpdateStripsAction,
+  ClearStripsAction,
+} from 'actions/photostrips';
 
 export enum ActionTypes {
-  addImage,
-  clearImages,
+  updateStrip,
   createStrips,
+  clearStrips,
 }
 
-export type Action = AddImageAction | ClearImagesAction | CreateStripsAction;
+export type Action =
+  | CreateStripsAction
+  | UpdateStripsAction
+  | ClearStripsAction;

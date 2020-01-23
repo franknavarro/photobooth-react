@@ -1,8 +1,10 @@
 import Jimp from 'jimp';
 
 import { ActionTypes } from 'actions/types';
-import { AppThunk } from 'reducers';
-import { PhotostripState, StripProps } from 'reducers/photostrips';
+import { PromiseThunk } from 'reducers';
+import { StripProps } from 'reducers/photostrips';
+
+import history from 'routerHistory';
 
 import {
   photoPaperPixels,
@@ -14,7 +16,14 @@ import {
 
 export interface CreateStripsAction {
   type: ActionTypes.createStrips;
-  payload: PhotostripState;
+  payload: StripProps[];
+}
+export interface UpdateStripsAction {
+  type: ActionTypes.updateStrip;
+  payload: Jimp;
+}
+export interface ClearStripsAction {
+  type: ActionTypes.clearStrips;
 }
 
 interface StripData {
@@ -22,19 +31,28 @@ interface StripData {
   images: Jimp[];
 }
 
-export const createStrips = (): AppThunk<Promise<void>> => {
+export const updateStrip = (
+  recentImage: string,
+  imageNum: number,
+): PromiseThunk => {
   return async (dispatch, getState) => {
-    const imagesBase64 = getState().images;
+    const updateThis = getState().photostrips.inProgress;
 
-    const stripColored: Jimp = new Jimp(...stripSizePixels, 'white', () => {});
-    await Promise.all(
-      imagesBase64.map(async (image: string, index: number) => {
-        const jimpImg: Jimp = await Jimp.read(image);
-        jimpImg.resize(imageSizePixels[0], imageSizePixels[1]);
-        stripColored.composite(jimpImg, xPosition, yPositions[index]);
-      }),
-    );
+    const jimpImg: Jimp = await Jimp.read(recentImage);
+    jimpImg.resize(imageSizePixels[0], imageSizePixels[1]);
 
+    updateThis.composite(jimpImg, xPosition, yPositions[imageNum - 1]);
+
+    dispatch<UpdateStripsAction>({
+      type: ActionTypes.updateStrip,
+      payload: updateThis,
+    });
+  };
+};
+
+export const createStrips = (): PromiseThunk => {
+  return async (dispatch, getState) => {
+    const stripColored = getState().photostrips.inProgress;
     const stripBW = stripColored.clone().grayscale();
 
     const stripMapData: StripData[] = [
@@ -57,5 +75,12 @@ export const createStrips = (): AppThunk<Promise<void>> => {
       type: ActionTypes.createStrips,
       payload: allStrips,
     });
+  };
+};
+
+export const clearStrips = (): ClearStripsAction => {
+  history.push('/');
+  return {
+    type: ActionTypes.clearStrips,
   };
 };
