@@ -13,7 +13,6 @@ import {
   xPosition,
   yPositions,
 } from 'resources/constants';
-import { setTimeout } from 'timers';
 
 const { ipcRenderer } = window.require('electron');
 
@@ -112,7 +111,7 @@ export const resetAndPrint = (print: string): AppThunk => {
 export const startPrint = (print: string): AppThunk => {
   return dispatch => {
     ipcRenderer.send('start:print', print);
-    ipcRenderer.on('started:print', event => {
+    ipcRenderer.on('started:print', () => {
       console.log('Started Print React');
       dispatch(updatePrint());
     });
@@ -125,7 +124,7 @@ export const updatePrint = (): AppThunk => {
     console.log('curr in redux: ', currPrintStatus);
 
     ipcRenderer.send('update:print', currPrintStatus);
-    ipcRenderer.on('updated:print', (event, printStatus: number) => {
+    ipcRenderer.on('updated:print', (_event: any, printStatus: number) => {
       dispatch<PrintAction>({
         type: ActionTypes.printUpdate,
         payload: printStatus,
