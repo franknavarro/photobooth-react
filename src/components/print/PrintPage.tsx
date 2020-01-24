@@ -1,20 +1,29 @@
 import React, { useEffect } from 'react';
-import { useCountDown } from 'resources/useCountDown';
+import { RouteChildrenProps } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 
 import 'components/print/PrintPage.css';
-import { RouteChildrenProps } from 'react-router-dom';
 
-const backwards = [3, 2, 1, 0];
+import { StoreState } from 'reducers';
+import { resetPrint, updatePrint } from 'actions';
+
 const PrintPage: React.FC<RouteChildrenProps> = ({ history }) => {
-  const [countDown] = useCountDown(10);
-  const bullets = '.'.repeat(backwards[countDown % 4]);
+  const printState = useSelector(
+    (state: StoreState) => state.photostrips.printStatus,
+  );
+  const dispatch = useDispatch();
+  console.log('updated in DOM: ', printState);
 
   useEffect(() => {
-    if (countDown === 0) {
+    if (printState >= 0 && printState < 10) {
+      const updateTimout = setTimeout(() => dispatch(updatePrint()), 2000);
+      return () => clearInterval(updateTimout);
+    } else {
+      dispatch(resetPrint());
       history.push('/');
     }
-  }, [countDown, history]);
+  }, [printState, history, dispatch]);
 
-  return <div className="print-text">Printing in progress{bullets}</div>;
+  return <div className="print-text">Printing in progress: {printState}</div>;
 };
 export default PrintPage;

@@ -14,6 +14,7 @@ export type PhotostripState = {
   inProgress: Jimp;
   all: StripProps[];
   images: ImageList;
+  printStatus: number;
 };
 
 const resetJimpImage = (): Jimp => {
@@ -29,6 +30,7 @@ const INITIAL_STATE: PhotostripState = {
   inProgress: resetJimpImage(),
   all: [{ ...INITIAL_STRIP }],
   images: [],
+  printStatus: 0,
 };
 
 export const photostripsReducer = (
@@ -45,11 +47,15 @@ export const photostripsReducer = (
     case ActionTypes.createStrips:
       return { ...state, all: [...action.payload] };
 
+    case ActionTypes.printUpdate:
+      return { ...state, printStatus: action.payload };
+
     case ActionTypes.clearStrips:
       return {
         inProgress: resetJimpImage(),
         all: [{ ...INITIAL_STRIP }],
         images: [],
+        printStatus: -1,
       };
 
     default:

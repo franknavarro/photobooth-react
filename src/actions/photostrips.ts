@@ -13,12 +13,14 @@ import {
   xPosition,
   yPositions,
 } from 'resources/constants';
+import { setTimeout } from 'timers';
+
+const { ipcRenderer } = window.require('electron');
 
 export interface AddPhotoAction {
   type: ActionTypes.addPhoto;
   payload: string;
 }
-
 export interface CreateStripsAction {
   type: ActionTypes.createStrips;
   payload: StripProps[];
@@ -30,6 +32,10 @@ export interface UpdateStripsAction {
 export interface ClearStripsAction {
   type: ActionTypes.clearStrips;
 }
+export interface PrintAction {
+  type: ActionTypes.printUpdate;
+  payload: number;
+}
 
 interface StripData {
   type: string;
@@ -38,7 +44,7 @@ interface StripData {
 
 export const addPhoto = (recentImage: string, imageNum: number): AppThunk => {
   return dispatch => {
-    dispatch({
+    dispatch<AddPhotoAction>({
       type: ActionTypes.addPhoto,
       payload: recentImage,
     });
@@ -93,10 +99,44 @@ export const createStrips = (): PromiseThunk => {
   };
 };
 
-export const resetAndPrint = (print: string): ClearStripsAction => {
-  history.push('/print');
-  console.log('Print', print);
+export const resetAndPrint = (print: string): AppThunk => {
+  return dispatch => {
+    history.push('/print');
+    dispatch<ClearStripsAction>({
+      type: ActionTypes.clearStrips,
+    });
+    dispatch<void>(startPrint(print));
+  };
+};
+
+export const startPrint = (print: string): AppThunk => {
+  return dispatch => {
+    ipcRenderer.send('start:print', print);
+    ipcRenderer.on('started:print', event => {
+      console.log('Started Print React');
+      dispatch(updatePrint());
+    });
+  };
+};
+
+export const updatePrint = (): AppThunk => {
+  return (dispatch, getState) => {
+    const currPrintStatus = getState().photostrips.printStatus;
+    console.log('curr in redux: ', currPrintStatus);
+
+    ipcRenderer.send('update:print', currPrintStatus);
+    ipcRenderer.on('updated:print', (event, printStatus: number) => {
+      dispatch<PrintAction>({
+        type: ActionTypes.printUpdate,
+        payload: printStatus,
+      });
+    });
+  };
+};
+
+export const resetPrint = (): PrintAction => {
   return {
-    type: ActionTypes.clearStrips,
+    type: ActionTypes.printUpdate,
+    payload: -1,
   };
 };

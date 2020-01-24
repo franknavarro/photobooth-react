@@ -9,7 +9,7 @@ import { resetAndPrint } from 'actions';
 import 'components/selector/SelectPage.css';
 import { useCountDown } from 'resources/useCountDown';
 
-const SelectPage: React.FC<RouteChildrenProps> = ({ history }) => {
+const SelectPage: React.FC<RouteChildrenProps> = () => {
   const photostrips = useSelector((state: StoreState) => state.photostrips.all);
   console.log(photostrips);
   const firstOption = photostrips[0];

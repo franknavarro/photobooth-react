@@ -1,6 +1,4 @@
-const electron = require('electron');
-const app = electron.app;
-const BrowserWindow = electron.BrowserWindow;
+const { app, BrowserWindow, ipcMain } = require('electron');
 
 const path = require('path');
 const isDev = require('electron-is-dev');
@@ -41,4 +39,17 @@ app.on('activate', () => {
   if (mainWindow === null) {
     createWindow();
   }
+});
+
+ipcMain.on('update:print', (event, tempREMOVE) => {
+  // Exucute command to get printer update
+  const newStatus = tempREMOVE + 1;
+  console.log(`updated in electron: ${newStatus}`);
+  mainWindow.webContents.send('updated:print', newStatus);
+});
+
+ipcMain.on('start:print', event => {
+  // Execute commomand here to start printing process
+  console.log('Starting Print');
+  mainWindow.webContents.send('started:print');
 });
