@@ -16,18 +16,7 @@ const PrintPage: React.FC<RouteChildrenProps> = ({ history }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    console.log(
-      'print in react: ',
-      printStatus,
-      ' === "" : ',
-      printStatus === '',
-      ' && ',
-      printStatus !== '',
-      ' /// ',
-      printerInCheck,
-      ' && ',
-      showComplete,
-    );
+    console.log('print status: ', printStatus);
     if (printStatus !== '' && !printerInCheck) {
       console.log('Updating Print in 1 sec');
       const updateTimout = setTimeout(() => dispatch(updatePrint()), 1000);
@@ -44,11 +33,12 @@ const PrintPage: React.FC<RouteChildrenProps> = ({ history }) => {
     }
   }, [printStatus, printerInCheck, history, dispatch, showComplete]);
 
+
   return (
     <div className="flex-container">
       {!showComplete ? (
         <>
-          <div className="print-text">Printing in progress...</div>
+          <div className="print-text">{printStatus === 'Waiting...' ? 'Warming up the rocket ship... and the printer.' : 'Printing in progress...'}</div>
           <Spinner />
         </>
       ) : (

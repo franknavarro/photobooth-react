@@ -17,6 +17,7 @@ function createWindow() {
     width: 900,
     height: 600,
     webPreferences: { nodeIntegration: true },
+    fullscreen: true,
   });
 
   mainWindow.loadURL(
@@ -25,7 +26,7 @@ function createWindow() {
       : `file://${path.join(__dirname, '../build/index.html')}`,
   );
 
-  mainWindow.toggleDevTools();
+  // mainWindow.toggleDevTools();
 
   mainWindow.on('closed', () => {
     mainWindow = null;

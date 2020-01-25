@@ -4,12 +4,14 @@ import Webcam from 'react-webcam';
 import { RouteComponentProps } from 'react-router-dom';
 
 import TextContainer from 'components/TextContainer';
+import Spinner from 'components/Spinner';
 
 import 'components/webcam/WebcamPage.css';
 
 import { addPhoto, createStrips } from 'actions';
 import { useCountDown } from 'resources/useCountDown';
 import { photoCount, imageSizePixels } from 'resources/constants';
+import { feelGoods } from 'resources/language';
 
 const videoConstraints = {
   facingMode: 'user',
@@ -33,6 +35,7 @@ const WebcamPic: React.FC<RouteComponentProps> = ({ history }) => {
   const [countState, setCountState] = useState(countDownStates.initial);
   const [recentCapture, setCaptured] = useState('');
   const [imageCount, setImageCount] = useState(0);
+  const [randomSaying, setRandomSaying] = useState(0);
 
   const webcamRef = React.useRef<any>(null);
 
@@ -53,6 +56,7 @@ const WebcamPic: React.FC<RouteComponentProps> = ({ history }) => {
       dispatch(addPhoto(imgSrc, newImageCount));
       setImageCount(newImageCount);
       setCountState(countDownStates.forImage);
+      setRandomSaying(Math.floor(Math.random() * feelGoods.length))
       setCaptured(imgSrc);
       resetCountDown(pictureCount);
     } else if (countDown < 1 && countState === countDownStates.forImage) {
@@ -80,9 +84,10 @@ const WebcamPic: React.FC<RouteComponentProps> = ({ history }) => {
 
       case countDownStates.forImage:
         if (imageCount < photoCount) {
-          return 'Get Ready for the next one!';
+          console.log(randomSaying);
+          return feelGoods[randomSaying];
         }
-        return 'Looking goooooooood!!!!';
+        return 'Please hold while your strips are generated';
 
       default:
         if (countDown > cameraCount) {
@@ -91,6 +96,12 @@ const WebcamPic: React.FC<RouteComponentProps> = ({ history }) => {
         return `${countDown}`;
     }
   };
+  const generateSpinner = (): JSX.Element | null => {
+    if( imageCount >= photoCount && countState === countDownStates.forImage ) {
+      return <Spinner />
+    }
+    return null;
+  }
 
   const getTopText = (): string => {
     if (countState === countDownStates.initial) {
@@ -128,6 +139,8 @@ const WebcamPic: React.FC<RouteComponentProps> = ({ history }) => {
       </div>
       <TextContainer className="text-container--bottom">
         {getBottomText()}
+        <br/>
+        {generateSpinner()}
       </TextContainer>
     </div>
   );

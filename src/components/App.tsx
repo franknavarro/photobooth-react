@@ -10,6 +10,7 @@ import history from 'routerHistory';
 import { useDispatch, useSelector } from 'react-redux';
 import { StoreState } from 'reducers';
 import { getInitial } from 'actions';
+import Spinner from 'components/Spinner';
 
 const containerStyles: CSSProperties = {
   backgroundColor: 'pink',
@@ -39,7 +40,11 @@ const App: React.FC = () => {
             <Route path="/print" exact component={PrintPage} />
           </Switch>
         </Router>
-      ) : null}
+      ) : (
+        <div style={{position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)'}}>
+          <Spinner />
+       </div> 
+     )}
     </div>
   );
 };
