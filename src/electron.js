@@ -1,8 +1,12 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const fs = require('fs');
+const exec = require('child_process').exec;
 
 const path = require('path');
 const isDev = require('electron-is-dev');
+
+const printPath = path.join(app.getPath('home'), 'Pictures/print.jpg');
+console.log(printPath);
 
 require('electron-reload');
 
@@ -14,7 +18,6 @@ function createWindow() {
     height: 600,
     webPreferences: { nodeIntegration: true },
   });
-  console.log(__dirname);
 
   mainWindow.loadURL(
     isDev
@@ -50,15 +53,24 @@ ipcMain.on('get:strip', () => {
   mainWindow.webContents.send('retrieved:strip', bitmap);
 });
 
-ipcMain.on('update:print', (_event, tempREMOVE) => {
-  // Exucute command to get printer update
-  const newStatus = tempREMOVE + 10;
-  console.log(`updated in electron: ${newStatus}`);
-  mainWindow.webContents.send('updated:print', newStatus);
+ipcMain.on('update:print', _event => {
+  exec('lpstat', (_error, stdout, stderr) => {
+    console.log('stdout: [' + stdout + ']');
+    console.log('stderr: [' + stderr + ']');
+    // Exucute command to get printer update
+    mainWindow.webContents.send('updated:print', stdout);
+  });
 });
 
-ipcMain.on('start:print', _event => {
+ipcMain.on('start:print', (_event, printString) => {
   // Execute commomand here to start printing process
-  console.log('Starting Print');
-  mainWindow.webContents.send('started:print');
+  const base64Data = printString.split(',')[1];
+  fs.writeFile(printPath, base64Data, 'base64', () => {
+    exec(`lp ${printPath}`, (_error, stdout, stderr) => {
+      console.log('Started Print');
+      console.log('stdout: [' + stdout + ']');
+      console.log('stderr: [' + stderr + ']');
+      mainWindow.webContents.send('started:print');
+    });
+  });
 });

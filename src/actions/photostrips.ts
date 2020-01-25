@@ -33,7 +33,7 @@ export interface ClearStripsAction {
 }
 export interface PrintAction {
   type: ActionTypes.printUpdate;
-  payload: number;
+  payload: string;
 }
 export interface PrinterInCheckAction {
   type: ActionTypes.printerInCheck;
@@ -160,8 +160,8 @@ export const updatePrint = (): AppThunk => {
     dispatch<PrinterInCheckAction>({
       type: ActionTypes.printerInCheck,
     });
-    ipcRenderer.send('update:print', currPrintStatus);
-    ipcRenderer.once('updated:print', (_event: any, printStatus: number) => {
+    ipcRenderer.send('update:print');
+    ipcRenderer.once('updated:print', (_event: any, printStatus: string) => {
       dispatch<PrintAction>({
         type: ActionTypes.printUpdate,
         payload: printStatus,
@@ -173,6 +173,6 @@ export const updatePrint = (): AppThunk => {
 export const resetPrint = (): PrintAction => {
   return {
     type: ActionTypes.printUpdate,
-    payload: -1,
+    payload: 'Waiting...',
   };
 };

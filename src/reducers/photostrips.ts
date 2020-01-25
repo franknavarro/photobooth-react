@@ -13,7 +13,7 @@ export type PhotostripState = {
   inProgress: Jimp;
   all: StripProps[];
   images: ImageList;
-  printStatus: number;
+  printStatus: string;
   printerInCheck: boolean;
   initial: string;
 };
@@ -28,8 +28,8 @@ const INITIAL_STATE: PhotostripState = {
   inProgress: new Jimp(1, 1),
   all: [{ ...INITIAL_STRIP }],
   images: [],
-  printStatus: 0,
-  printerInCheck: false,
+  printStatus: 'Waiting...',
+  printerInCheck: true,
 };
 
 export const photostripsReducer = (
@@ -59,8 +59,8 @@ export const photostripsReducer = (
         ...state,
         all: [{ ...INITIAL_STRIP }],
         images: [],
-        printStatus: -1,
-        printerInCheck: false,
+        printStatus: 'Waiting...',
+        printerInCheck: true,
       };
 
     default:

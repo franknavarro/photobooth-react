@@ -16,12 +16,27 @@ const PrintPage: React.FC<RouteChildrenProps> = ({ history }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (printStatus >= 0 && printStatus < 100 && !printerInCheck) {
+    console.log(
+      'print in react: ',
+      printStatus,
+      ' === "" : ',
+      printStatus === '',
+      ' && ',
+      printStatus !== '',
+      ' /// ',
+      printerInCheck,
+      ' && ',
+      showComplete,
+    );
+    if (printStatus !== '' && !printerInCheck) {
+      console.log('Updating Print in 1 sec');
       const updateTimout = setTimeout(() => dispatch(updatePrint()), 1000);
       return () => clearInterval(updateTimout);
-    } else if (printStatus >= 100 && !showComplete) {
+    } else if (printStatus === '' && !showComplete) {
+      console.log('We just completed');
       setShowComplete(true);
-    } else if (printStatus >= 100 && showComplete) {
+    } else if (printStatus === '' && showComplete) {
+      console.log('Prepare to redirect');
       setTimeout(() => {
         dispatch(resetPrint());
         history.push('/');
