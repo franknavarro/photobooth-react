@@ -16,7 +16,6 @@ const videoConstraints = {
   width: imageSizePixels[0],
   height: imageSizePixels[1],
 };
-console.log(imageSizePixels);
 
 enum countDownStates {
   initial,

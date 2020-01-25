@@ -36,3 +36,8 @@ for (let i = 1; i < photoCount; i++) {
 }
 export const xPosition: number = stripBorderPixels;
 export const yPositions = [...yPos];
+
+console.log(stripSizePixels);
+console.log(imageSizePixels);
+console.log(stripBorderPixels);
+console.log(yPos);
