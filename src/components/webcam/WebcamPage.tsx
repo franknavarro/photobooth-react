@@ -5,7 +5,7 @@ import { RouteComponentProps } from 'react-router-dom';
 
 import TextContainer from 'components/TextContainer';
 
-import 'components/webcam/WebcomPage.css';
+import 'components/webcam/WebcamPage.css';
 
 import { addPhoto, createStrips } from 'actions';
 import { useCountDown } from 'resources/useCountDown';
