@@ -5,7 +5,7 @@ import 'components/TextContainer.css';
 const TextContainer: React.FC<React.HTMLAttributes<HTMLDivElement>> = props => {
   return (
     <div className={`text-container ${props.className}`}>
-      <span>{props.children}</span>
+      <div>{props.children}</div>
     </div>
   );
 };

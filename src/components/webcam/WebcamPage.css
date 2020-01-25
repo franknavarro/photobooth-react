@@ -1,9 +1,18 @@
 .video-container {
-  padding: 0 3vh;
+  width: 100%;
+  padding: 0 3vw;
+  flex: 1 1 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
 }
 
 .video-container > * {
-  padding: 1vh;
+  zoom: 2;
+  width: auto;
+  height: auto;
+  padding: 6px;
   max-height: 100%;
   max-width: 100%;
   background: white;
@@ -11,9 +20,6 @@
   box-sizing: border-box;
 }
 
-.video-container > .on-top {
-  display: initial;
-}
 .video-container > .hidden {
   display: none;
 }
