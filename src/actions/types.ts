@@ -4,6 +4,7 @@ import {
   UpdateStripsAction,
   ClearStripsAction,
   PrintAction,
+  PrinterInCheckAction,
 } from 'actions/photostrips';
 
 export enum ActionTypes {
@@ -12,6 +13,7 @@ export enum ActionTypes {
   createStrips,
   clearStrips,
   printUpdate,
+  printerInCheck,
 }
 
 export type Action =
@@ -19,4 +21,5 @@ export type Action =
   | CreateStripsAction
   | UpdateStripsAction
   | ClearStripsAction
-  | PrintAction;
+  | PrintAction
+  | PrinterInCheckAction;

@@ -8,22 +8,22 @@ import { StoreState } from 'reducers';
 import { resetPrint, updatePrint } from 'actions';
 
 const PrintPage: React.FC<RouteChildrenProps> = ({ history }) => {
-  const printState = useSelector(
-    (state: StoreState) => state.photostrips.printStatus,
+  const { printStatus, printerInCheck } = useSelector(
+    (state: StoreState) => state.photostrips,
   );
   const dispatch = useDispatch();
-  console.log('updated in DOM: ', printState);
 
   useEffect(() => {
-    if (printState >= 0 && printState < 10) {
+    console.log(printerInCheck);
+    if (printStatus >= 0 && printStatus < 100 && !printerInCheck) {
       const updateTimout = setTimeout(() => dispatch(updatePrint()), 1000);
       return () => clearInterval(updateTimout);
-    } else if (printState >= 10) {
+    } else if (printStatus >= 100) {
       dispatch(resetPrint());
       history.push('/');
     }
-  }, [printState, history, dispatch]);
+  }, [printStatus, printerInCheck, history, dispatch]);
 
-  return <div className="print-text">Printing in progress: {printState}</div>;
+  return <div className="print-text">Printing in progress: {printStatus}</div>;
 };
 export default PrintPage;

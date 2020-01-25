@@ -34,6 +34,9 @@ export interface PrintAction {
   type: ActionTypes.printUpdate;
   payload: number;
 }
+export interface PrinterInCheckAction {
+  type: ActionTypes.printerInCheck;
+}
 
 interface StripData {
   type: string;
@@ -109,7 +112,7 @@ export const resetAndPrint = (print: string): AppThunk => {
 export const startPrint = (print: string): AppThunk => {
   return dispatch => {
     ipcRenderer.send('start:print', print);
-    ipcRenderer.on('started:print', () => {
+    ipcRenderer.once('started:print', () => {
       console.log('Started Print React');
       dispatch(updatePrint());
     });
@@ -121,8 +124,11 @@ export const updatePrint = (): AppThunk => {
     const currPrintStatus = getState().photostrips.printStatus;
     console.log('curr in redux: ', currPrintStatus);
 
+    dispatch<PrinterInCheckAction>({
+      type: ActionTypes.printerInCheck,
+    });
     ipcRenderer.send('update:print', currPrintStatus);
-    ipcRenderer.on('updated:print', (_event: any, printStatus: number) => {
+    ipcRenderer.once('updated:print', (_event: any, printStatus: number) => {
       dispatch<PrintAction>({
         type: ActionTypes.printUpdate,
         payload: printStatus,
