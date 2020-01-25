@@ -34,11 +34,14 @@ const SelectPage: React.FC<RouteChildrenProps> = () => {
         Please tap print color
       </TextContainer>
       <div className="button-container">
-        {photostrips.map(({ type, pic }) => (
-          <button onClick={() => printThisPhoto(pic)} className="button">
+        {photostrips.map(({ type, pic }, index) => (
+          <button
+            onClick={() => printThisPhoto(pic)}
+            className="button"
+            key={index}
+          >
             <img
               className="button-image"
-              key={type}
               style={{ maxWidth: '50%', maxHeight: '50%', padding: '5px' }}
               src={pic}
               alt={type}
