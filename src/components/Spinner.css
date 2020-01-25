@@ -1,17 +1,19 @@
-.progress-bar {
-  position: relative;
-  height: 20px;
-  width: 90%;
-  border-radius: 50px;
-  border: 1px solid #333;
-  background: #fff;
-}
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 
-.progress {
-  background: #1DA598;
-  height: 100%;
-  border-radius: inherit;
-  transition: width .2s ease-in;
+}
+.spinner {
+  border: 1rem solid rgba(0, 0, 0, 0.1);
+  border-top: 1rem solid #ffffff;
+  border-radius: 50%;
+  width: 5rem;
+  height: 5rem;
+  animation: spin 1s linear infinite;
 }
 
 @keyframes moveInLeft {

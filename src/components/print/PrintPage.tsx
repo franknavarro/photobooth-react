@@ -6,7 +6,7 @@ import 'components/print/PrintPage.css';
 
 import { StoreState } from 'reducers';
 import { resetPrint, updatePrint } from 'actions';
-import ProgressBar from 'components/ProgressBar';
+import Spinner from 'components/Spinner';
 
 const PrintPage: React.FC<RouteChildrenProps> = ({ history }) => {
   const { printStatus, printerInCheck } = useSelector(
@@ -34,7 +34,7 @@ const PrintPage: React.FC<RouteChildrenProps> = ({ history }) => {
       {!showComplete ? (
         <>
           <div className="print-text">Printing in progress...</div>
-          <ProgressBar completed={printStatus > 100 ? 100 : printStatus} />
+          <Spinner />
         </>
       ) : (
         <>
