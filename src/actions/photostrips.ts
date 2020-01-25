@@ -11,6 +11,7 @@ import {
   stripSizePixels,
   xPosition,
   yPositions,
+  imageSizePixels,
 } from 'resources/constants';
 
 const { ipcRenderer } = window.require('electron');
@@ -61,6 +62,7 @@ export const updateStrip = (
     const updateThis = getState().photostrips.inProgress;
 
     const jimpImg: Jimp = await Jimp.read(recentImage);
+    jimpImg.resize(...imageSizePixels);
 
     updateThis.composite(jimpImg, xPosition, yPositions[imageNum - 1]);
 
