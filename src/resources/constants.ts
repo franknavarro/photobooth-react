@@ -1,7 +1,7 @@
 type dimmensions = [number, number];
 
 const hasLogo: boolean = true;
-const photoCount: number = 3;
+export const photoCount: number = 3;
 const dpi: number = 300;
 
 const imageports: number = hasLogo ? photoCount + 1 : photoCount;

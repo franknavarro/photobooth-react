@@ -9,10 +9,14 @@ import 'components/webcam/WebcomPage.css';
 
 import { addPhoto, createStrips } from 'actions';
 import { useCountDown } from 'resources/useCountDown';
+import { photoCount, imageSizePixels } from 'resources/constants';
 
 const videoConstraints = {
   facingMode: 'user',
+  width: imageSizePixels[0],
+  height: imageSizePixels[1],
 };
+console.log(imageSizePixels);
 
 enum countDownStates {
   initial,
@@ -22,7 +26,6 @@ enum countDownStates {
 
 const cameraCount: number = 5;
 const pictureCount: number = 2;
-const maxPhotos: number = 3;
 
 const WebcamPic: React.FC<RouteComponentProps> = ({ history }) => {
   const dispatch = useDispatch();
@@ -63,7 +66,7 @@ const WebcamPic: React.FC<RouteComponentProps> = ({ history }) => {
       setCaptured(imgSrc);
       resetCountDown(pictureCount);
     } else if (countDown < 1 && countState === countDownStates.forImage) {
-      if (imageCount < maxPhotos) {
+      if (imageCount < photoCount) {
         setCountState(countDownStates.forSnapShot);
         resetCountDown(cameraCount);
 
@@ -86,7 +89,7 @@ const WebcamPic: React.FC<RouteComponentProps> = ({ history }) => {
         return 'Push Button to Start';
 
       case countDownStates.forImage:
-        if (imageCount < maxPhotos) {
+        if (imageCount < photoCount) {
           return 'Get Ready for the next one!';
         }
         return 'Looking goooooooood!!!!';
@@ -106,7 +109,7 @@ const WebcamPic: React.FC<RouteComponentProps> = ({ history }) => {
 
     const imageNum =
       countState === countDownStates.forImage ? imageCount : imageCount + 1;
-    return `Photo ${imageNum} of ${maxPhotos}`;
+    return `Photo ${imageNum} of ${photoCount}`;
   };
 
   return (

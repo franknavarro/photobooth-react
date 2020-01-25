@@ -9,7 +9,6 @@ import history from 'routerHistory';
 import {
   photoPaperPixels,
   stripSizePixels,
-  imageSizePixels,
   xPosition,
   yPositions,
 } from 'resources/constants';
@@ -59,7 +58,6 @@ export const updateStrip = (
     const updateThis = getState().photostrips.inProgress;
 
     const jimpImg: Jimp = await Jimp.read(recentImage);
-    jimpImg.resize(imageSizePixels[0], imageSizePixels[1]);
 
     updateThis.composite(jimpImg, xPosition, yPositions[imageNum - 1]);
 
