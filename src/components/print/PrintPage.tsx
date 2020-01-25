@@ -16,9 +16,9 @@ const PrintPage: React.FC<RouteChildrenProps> = ({ history }) => {
 
   useEffect(() => {
     if (printState >= 0 && printState < 10) {
-      const updateTimout = setTimeout(() => dispatch(updatePrint()), 2000);
+      const updateTimout = setTimeout(() => dispatch(updatePrint()), 1000);
       return () => clearInterval(updateTimout);
-    } else {
+    } else if (printState >= 10) {
       dispatch(resetPrint());
       history.push('/');
     }
