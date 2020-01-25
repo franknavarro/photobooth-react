@@ -1,4 +1,5 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
+const fs = require('fs');
 
 const path = require('path');
 const isDev = require('electron-is-dev');
@@ -13,6 +14,7 @@ function createWindow() {
     height: 600,
     webPreferences: { nodeIntegration: true },
   });
+  console.log(__dirname);
 
   mainWindow.loadURL(
     isDev
@@ -39,6 +41,13 @@ app.on('activate', () => {
   if (mainWindow === null) {
     createWindow();
   }
+});
+
+ipcMain.on('get:strip', () => {
+  const bitmap =
+    'data:image/jpg;base64,' +
+    fs.readFileSync(`${path.join(__dirname, '../photostrip.jpg')}`, 'base64');
+  mainWindow.webContents.send('retrieved:strip', bitmap);
 });
 
 ipcMain.on('update:print', (_event, tempREMOVE) => {

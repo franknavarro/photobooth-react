@@ -39,10 +39,34 @@ export interface PrinterInCheckAction {
   type: ActionTypes.printerInCheck;
 }
 
+export interface GetInitial {
+  type: ActionTypes.getInitial;
+  payload: string;
+}
+
 interface StripData {
   type: string;
   images: Jimp[];
 }
+
+export const getInitial = (): AppThunk => {
+  return dispatch => {
+    ipcRenderer.send('get:strip');
+    ipcRenderer.once('retrieved:strip', (_event, stripData: string) => {
+      console.log(stripData);
+      Jimp.read(stripData, (_err, initialStrip) => {
+        dispatch<UpdateStripsAction>({
+          type: ActionTypes.updateStrip,
+          payload: initialStrip.resize(...stripSizePixels),
+        });
+        dispatch({
+          type: ActionTypes.getInitial,
+          payload: stripData,
+        });
+      });
+    });
+  };
+};
 
 export const addPhoto = (recentImage: string, imageNum: number): AppThunk => {
   return dispatch => {
@@ -102,12 +126,19 @@ export const createStrips = (): PromiseThunk => {
 };
 
 export const resetAndPrint = (print: string): AppThunk => {
-  return dispatch => {
+  return (dispatch, getState) => {
     history.push('/print');
-    dispatch<ClearStripsAction>({
-      type: ActionTypes.clearStrips,
+    const { initial } = getState().photostrips;
+    Jimp.read(initial, (_err, jimpImg) => {
+      dispatch<UpdateStripsAction>({
+        type: ActionTypes.updateStrip,
+        payload: jimpImg.resize(...stripSizePixels),
+      });
+      dispatch<ClearStripsAction>({
+        type: ActionTypes.clearStrips,
+      });
+      dispatch<void>(startPrint(print));
     });
-    dispatch<void>(startPrint(print));
   };
 };
 

@@ -11,7 +11,6 @@ import { useCountDown } from 'resources/useCountDown';
 
 const SelectPage: React.FC<RouteChildrenProps> = () => {
   const photostrips = useSelector((state: StoreState) => state.photostrips.all);
-  console.log(photostrips);
   const firstOption = photostrips[0];
 
   const [countDown] = useCountDown(20);

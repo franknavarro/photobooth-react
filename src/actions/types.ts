@@ -1,4 +1,5 @@
 import {
+  GetInitial,
   AddPhotoAction,
   CreateStripsAction,
   UpdateStripsAction,
@@ -8,6 +9,7 @@ import {
 } from 'actions/photostrips';
 
 export enum ActionTypes {
+  getInitial,
   addPhoto,
   updateStrip,
   createStrips,
@@ -17,6 +19,7 @@ export enum ActionTypes {
 }
 
 export type Action =
+  | GetInitial
   | AddPhotoAction
   | CreateStripsAction
   | UpdateStripsAction

@@ -1,7 +1,6 @@
 import Jimp from 'jimp';
 
 import { ActionTypes, Action } from 'actions';
-import { stripSizePixels } from 'resources/constants';
 
 export interface StripProps {
   type: string;
@@ -16,10 +15,7 @@ export type PhotostripState = {
   images: ImageList;
   printStatus: number;
   printerInCheck: boolean;
-};
-
-const resetJimpImage = (): Jimp => {
-  return new Jimp(...stripSizePixels, 'white');
+  initial: string;
 };
 
 const INITIAL_STRIP: StripProps = {
@@ -28,7 +24,8 @@ const INITIAL_STRIP: StripProps = {
 };
 
 const INITIAL_STATE: PhotostripState = {
-  inProgress: resetJimpImage(),
+  initial: '',
+  inProgress: new Jimp(1, 1),
   all: [{ ...INITIAL_STRIP }],
   images: [],
   printStatus: 0,
@@ -40,6 +37,8 @@ export const photostripsReducer = (
   action: Action,
 ): PhotostripState => {
   switch (action.type) {
+    case ActionTypes.getInitial:
+      return { ...state, initial: action.payload };
     case ActionTypes.addPhoto:
       return { ...state, images: [...state.images, action.payload] };
 
@@ -57,7 +56,7 @@ export const photostripsReducer = (
 
     case ActionTypes.clearStrips:
       return {
-        inProgress: resetJimpImage(),
+        ...state,
         all: [{ ...INITIAL_STRIP }],
         images: [],
         printStatus: -1,
