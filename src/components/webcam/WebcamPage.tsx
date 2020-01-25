@@ -37,20 +37,11 @@ const WebcamPic: React.FC<RouteComponentProps> = ({ history }) => {
   const webcamRef = React.useRef<any>(null);
 
   // Wait for Keyboard press to start count down
-  const startCountDown = useCallback(
-    (event: KeyboardEvent) => {
-      if (event.key === ' ') {
-        setCountState(countDownStates.forSnapShot);
-        resetCountDown();
-        window.removeEventListener('keydown', startCountDown);
-      }
-    },
-    [resetCountDown],
-  );
-  useEffect(() => {
-    window.addEventListener('keydown', startCountDown);
-    return () => window.removeEventListener('keydown', startCountDown);
-  }, [startCountDown]);
+  const startCountDown = (): void => {
+    console.log('Clicked Screen');
+    setCountState(countDownStates.forSnapShot);
+    resetCountDown();
+  };
 
   // Count down reached zero figure out what to do next
   useEffect(() => {
@@ -85,7 +76,7 @@ const WebcamPic: React.FC<RouteComponentProps> = ({ history }) => {
   const getBottomText = (): string => {
     switch (countState) {
       case countDownStates.initial:
-        return 'Push Button to Start';
+        return 'Touch Screen to Start';
 
       case countDownStates.forImage:
         if (imageCount < photoCount) {
@@ -112,7 +103,12 @@ const WebcamPic: React.FC<RouteComponentProps> = ({ history }) => {
   };
 
   return (
-    <div className="flex-container">
+    <div
+      className="flex-container"
+      onClick={() =>
+        countState === countDownStates.initial ? startCountDown() : ''
+      }
+    >
       <TextContainer className="text-container--top">
         {getTopText()}
       </TextContainer>
