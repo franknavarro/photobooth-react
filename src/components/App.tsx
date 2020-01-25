@@ -15,6 +15,7 @@ const containerStyles: CSSProperties = {
   position: 'absolute',
   top: '0',
   left: '0',
+  cursor: 'none',
 };
 
 const App: React.FC = () => {

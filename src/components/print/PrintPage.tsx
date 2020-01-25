@@ -25,7 +25,7 @@ const PrintPage: React.FC<RouteChildrenProps> = ({ history }) => {
       setTimeout(() => {
         dispatch(resetPrint());
         history.push('/');
-      }, 5000);
+      }, 7500);
     }
   }, [printStatus, printerInCheck, history, dispatch, showComplete]);
 

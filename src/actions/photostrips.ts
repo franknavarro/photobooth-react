@@ -77,7 +77,7 @@ export const createStrips = (): PromiseThunk => {
     const stripBW = stripColored.clone().grayscale();
 
     const stripMapData: StripData[] = [
-      { type: 'Colored', images: [stripColored, stripColored] },
+      { type: 'Color', images: [stripColored, stripColored] },
       { type: 'Black & White', images: [stripBW, stripBW] },
       { type: 'Both', images: [stripColored, stripBW] },
     ];

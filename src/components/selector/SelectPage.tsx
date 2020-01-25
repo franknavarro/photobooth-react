@@ -14,7 +14,7 @@ const SelectPage: React.FC<RouteChildrenProps> = () => {
   console.log(photostrips);
   const firstOption = photostrips[0];
 
-  const [countDown] = useCountDown(10);
+  const [countDown] = useCountDown(20);
 
   const dispatch = useDispatch();
 

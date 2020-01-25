@@ -11,7 +11,7 @@
 .text-container {
   font-size: 6rem;
   color: white;
-  padding: 0;
+  padding: 0 3vw;
   flex: 1 1 auto;
   display: flex;
   justify-content: center;
