@@ -33,12 +33,15 @@ const PrintPage: React.FC<RouteChildrenProps> = ({ history }) => {
     }
   }, [printStatus, printerInCheck, history, dispatch, showComplete]);
 
-
   return (
     <div className="flex-container">
       {!showComplete ? (
         <>
-          <div className="print-text">{printStatus === 'Waiting...' ? 'Warming up the rocket ship... and the printer.' : 'Printing in progress...'}</div>
+          <div className="print-text">
+            {printStatus === 'Waiting...'
+              ? 'Warming up the rocket ship... and the printer.'
+              : 'Printing in progress...'}
+          </div>
           <Spinner />
         </>
       ) : (

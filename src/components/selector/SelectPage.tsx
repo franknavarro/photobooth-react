@@ -18,13 +18,13 @@ const SelectPage: React.FC<RouteChildrenProps> = () => {
   const dispatch = useDispatch();
 
   const printThisPhoto = (print: string): void => {
-    console.log("Sending off to printer");
+    console.log('Sending off to printer');
     dispatch(resetAndPrint(print));
   };
 
   useEffect(() => {
     if (countDown === 0) {
-      console.log("Auto Selecting...");
+      console.log('Auto Selecting...');
       dispatch(resetAndPrint(firstOption.pic));
     }
   }, [countDown, firstOption, dispatch]);

@@ -56,7 +56,7 @@ const WebcamPic: React.FC<RouteComponentProps> = ({ history }) => {
       dispatch(addPhoto(imgSrc, newImageCount));
       setImageCount(newImageCount);
       setCountState(countDownStates.forImage);
-      setRandomSaying(Math.floor(Math.random() * feelGoods.length))
+      setRandomSaying(Math.floor(Math.random() * feelGoods.length));
       setCaptured(imgSrc);
       resetCountDown(pictureCount);
     } else if (countDown < 1 && countState === countDownStates.forImage) {
@@ -97,11 +97,11 @@ const WebcamPic: React.FC<RouteComponentProps> = ({ history }) => {
     }
   };
   const generateSpinner = (): JSX.Element | null => {
-    if( imageCount >= photoCount && countState === countDownStates.forImage ) {
-      return <Spinner />
+    if (imageCount >= photoCount && countState === countDownStates.forImage) {
+      return <Spinner />;
     }
     return null;
-  }
+  };
 
   const getTopText = (): string => {
     if (countState === countDownStates.initial) {
@@ -139,7 +139,7 @@ const WebcamPic: React.FC<RouteComponentProps> = ({ history }) => {
       </div>
       <TextContainer className="text-container--bottom">
         {getBottomText()}
-        <br/>
+        <br />
         {generateSpinner()}
       </TextContainer>
     </div>

@@ -41,10 +41,17 @@ const App: React.FC = () => {
           </Switch>
         </Router>
       ) : (
-        <div style={{position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)'}}>
+        <div
+          style={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+          }}
+        >
           <Spinner />
-       </div> 
-     )}
+        </div>
+      )}
     </div>
   );
 };
