@@ -67,7 +67,7 @@
   "devDependencies": {
     "concurrently": "^5.0.2",
     "cross-env": "^6.0.3",
-    "electron": "^7.1.10",
+    "electron": "^18.3.7",
     "electron-builder": "^22.2.0",
     "electron-reload": "^1.5.0",
     "nodemon": "^2.0.2",
